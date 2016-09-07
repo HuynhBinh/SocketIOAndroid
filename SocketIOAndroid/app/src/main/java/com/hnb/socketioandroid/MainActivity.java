@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener
         }
         catch (URISyntaxException e)
         {
+
         }
     }
 
@@ -39,6 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         mSocket.connect();
         mSocket.on("to android", onNewMessage);
+        mSocket.on("broadcast", onNewMessage);
 
     }
 
@@ -49,6 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         mSocket.disconnect();
         mSocket.off("new message", onNewMessage);
+        mSocket.off("broadcast", onNewMessage);
     }
 
 
@@ -59,7 +63,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         if (id == R.id.btnSend)
         {
-            attemptSend("data from android device");
+            attemptSend("Android: " + edtMessage.getText().toString().trim());
         }
     }
 
@@ -85,8 +89,16 @@ public class MainActivity extends Activity implements View.OnClickListener
         @Override
         public void call(Object... args)
         {
-            String data = (String) args[0];
-            txtData.setText(data);
+            final String data = (String) args[0];
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    txtData.append( "\n" + data);
+                }
+            });
+
         }
     };
 }

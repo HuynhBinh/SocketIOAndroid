@@ -11,6 +11,9 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 
 public class MainActivity extends Activity implements View.OnClickListener
@@ -89,13 +92,27 @@ public class MainActivity extends Activity implements View.OnClickListener
         @Override
         public void call(Object... args)
         {
-            final String data = (String) args[0];
+            JSONObject data = (JSONObject) args[0];
+            final String x;
+            final String c;
+
+            try
+            {
+                x = data.getString("x");
+                c = data.getString("c");
+            }
+            catch (JSONException e)
+            {
+                return;
+            }
+
+
             runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    txtData.append( "\n" + data);
+                    txtData.append( "\n" + x + " " + c);
                 }
             });
 

@@ -30,9 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener
             mSocket = IO.socket("http://socketioserver-89654.onmodulus.net/");
         }
         catch (URISyntaxException e)
-        {
-
-        }
+        {}
     }
 
     @Override
@@ -44,7 +42,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         mSocket.connect();
         mSocket.on("to android", onNewMessage);
-        mSocket.on("broadcast", onNewMessage);
+        //mSocket.on("broadcast", onNewMessage);
 
     }
 
@@ -54,8 +52,8 @@ public class MainActivity extends Activity implements View.OnClickListener
         super.onDestroy();
 
         mSocket.disconnect();
-        mSocket.off("new message", onNewMessage);
-        mSocket.off("broadcast", onNewMessage);
+        mSocket.off("to android", onNewMessage);
+        //mSocket.off("broadcast", onNewMessage);
     }
 
 
@@ -98,8 +96,8 @@ public class MainActivity extends Activity implements View.OnClickListener
 
             try
             {
-                x = data.getString("x");
-                c = data.getString("c");
+                x = data.getString("name");
+                c = data.getString("email");
             }
             catch (JSONException e)
             {

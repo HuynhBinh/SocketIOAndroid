@@ -18,10 +18,20 @@ import java.net.URISyntaxException;
 
 public class MainActivity extends Activity implements View.OnClickListener
 {
-
     private EditText edtMessage;
     private TextView txtData;
     private Button btnSend;
+    private Button btnGetPosts;
+    private Button btnGetAddresses;
+    private Button btnGetCategories;
+
+    public static final String FromAndroid_GetPosts = "FromAndroid_GetPosts";
+    public static final String FromAndroid_GetAddresses = "FromAndroid_GetAddresses";
+    public static final String FromAndroid_GetCategories = "FromAndroid_GetCategories";
+
+    public static final String ToAndroid_GetPosts = "ToAndroid_GetPosts";
+    public static final String ToAndroid_GetAddresses = "ToAndroid_GetAddresses";
+    public static final String ToAndroid_GetCategories = "ToAndroid_GetCategories";
 
     private Socket mSocket;
     {
@@ -31,7 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener
         }
         catch (URISyntaxException e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -40,11 +50,10 @@ public class MainActivity extends Activity implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initView();
 
-        mSocket.connect();
-        mSocket.on("to android", onNewMessage);
-        mSocket.on("broadcast", onNewMessage);
+        initSocket();
 
     }
 
@@ -53,9 +62,8 @@ public class MainActivity extends Activity implements View.OnClickListener
     {
         super.onDestroy();
 
-        mSocket.disconnect();
-        mSocket.off("new message", onNewMessage);
-        mSocket.off("broadcast", onNewMessage);
+        terminalSocket();
+
     }
 
 
@@ -66,24 +74,67 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         if (id == R.id.btnSend)
         {
-            attemptSend("Android: " + edtMessage.getText().toString().trim());
+            attemptSend("from android" ,"Android: " + edtMessage.getText().toString().trim());
+        }
+
+        if (id == R.id.btnPost)
+        {
+            attemptSend(FromAndroid_GetPosts ,"{Android: 'Get Posts'}");
+        }
+
+        if (id == R.id.btnCate)
+        {
+            attemptSend(FromAndroid_GetCategories, "{Android: 'Get Categories'}");
+        }
+
+        if (id == R.id.btnAddress)
+        {
+            attemptSend(FromAndroid_GetAddresses, "{Android: 'Get Addresses'}");
         }
     }
 
+    private void initSocket()
+    {
+        mSocket.connect();
+        mSocket.on("to android", onNewMessage);
+        mSocket.on("broadcast", onNewMessage);
+        mSocket.on(ToAndroid_GetAddresses, onNewMessage);
+        mSocket.on(ToAndroid_GetCategories, onNewMessage);
+        mSocket.on(ToAndroid_GetPosts, onNewMessage);
+    }
+
+    private void terminalSocket()
+    {
+        mSocket.off("to android", onNewMessage);
+        mSocket.off("broadcast", onNewMessage);
+        mSocket.off(ToAndroid_GetPosts, onNewMessage);
+        mSocket.off(ToAndroid_GetCategories, onNewMessage);
+        mSocket.off(ToAndroid_GetAddresses, onNewMessage);
+        mSocket.disconnect();
+    }
 
     private void initView()
     {
         btnSend = (Button) findViewById(R.id.btnSend);
+        btnGetAddresses = (Button) findViewById(R.id.btnAddress);
+        btnGetCategories = (Button) findViewById(R.id.btnCate);
+        btnGetPosts = (Button) findViewById(R.id.btnPost);
+
         edtMessage = (EditText) findViewById(R.id.edtMess);
         txtData = (TextView) findViewById(R.id.txtData);
 
         btnSend.setOnClickListener(this);
+        btnGetPosts.setOnClickListener(this);
+        btnGetCategories.setOnClickListener(this);
+        btnGetAddresses.setOnClickListener(this);
+
+
     }
 
 
-    private void attemptSend(String data)
+    private void attemptSend(String event,  String data)
     {
-        mSocket.emit("from android", data);
+        mSocket.emit(event, data);
     }
 
 
@@ -92,27 +143,14 @@ public class MainActivity extends Activity implements View.OnClickListener
         @Override
         public void call(Object... args)
         {
-            JSONObject data = (JSONObject) args[0];
-            final String x;
-            final String c;
-
-            try
-            {
-                x = data.getString("x");
-                c = data.getString("c");
-            }
-            catch (JSONException e)
-            {
-                return;
-            }
-
+            final JSONObject data = (JSONObject) args[0];
 
             runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    txtData.append( "\n" + x + " " + c);
+                    txtData.append(data.toString());
                 }
             });
 

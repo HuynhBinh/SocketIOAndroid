@@ -2,6 +2,7 @@ package com.hnb.socketioandroid;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     {
         try
         {
-            mSocket = IO.socket("http://socketioserver-89654.onmodulus.net/");
+            mSocket = IO.socket("http://realtimeapi-90204.onmodulus.net/");
         }
         catch (URISyntaxException e)
         {
@@ -74,7 +76,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         if (id == R.id.btnSend)
         {
-            attemptSend("from android" ,"Android: " + edtMessage.getText().toString().trim());
+            attemptSend("from android" , edtMessage.getText().toString().trim());
         }
 
         if (id == R.id.btnPost)
@@ -127,8 +129,6 @@ public class MainActivity extends Activity implements View.OnClickListener
         btnGetPosts.setOnClickListener(this);
         btnGetCategories.setOnClickListener(this);
         btnGetAddresses.setOnClickListener(this);
-
-
     }
 
 
@@ -143,14 +143,14 @@ public class MainActivity extends Activity implements View.OnClickListener
         @Override
         public void call(Object... args)
         {
-            final JSONObject data = (JSONObject) args[0];
+            final String data = (String) args[0];
 
             runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    txtData.append(data.toString());
+                    txtData.append(data.toString() + '\n' + '\n');
                 }
             });
 

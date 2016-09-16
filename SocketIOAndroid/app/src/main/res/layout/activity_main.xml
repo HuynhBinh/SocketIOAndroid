@@ -20,6 +20,7 @@
             android:id="@+id/edtMess"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:text="huynhbinh"
             android:layout_toLeftOf="@+id/btnSend"
             />
 

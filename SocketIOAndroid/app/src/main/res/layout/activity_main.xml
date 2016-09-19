@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hnb.socketioandroid.MainActivity">
 
@@ -20,8 +18,8 @@
             android:id="@+id/edtMess"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="huynhbinh"
             android:layout_toLeftOf="@+id/btnSend"
+            android:text="huynhbinh"
             />
 
         <Button
@@ -56,32 +54,71 @@
 
         <Button
             android:id="@+id/btnAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
-            android:text="Get Addresses"
-            android:textSize="12sp"
+            android:text="G Address"
+            android:textSize="8sp"
             />
 
         <Button
             android:id="@+id/btnPost"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/btnAddress"
-            android:text="Get Posts"
-            android:textSize="12sp"
+            android:text="G Post"
+            android:textSize="8sp"
             />
 
         <Button
             android:id="@+id/btnCate"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/btnPost"
-            android:text="Get Categories"
-            android:textSize="12sp"
+            android:text="G Cate"
+            android:textSize="8sp"
+            />
+
+        <Button
+            android:id="@+id/btnInsertCat"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/btnCate"
+            android:text="I Cat"
+            android:textSize="8sp"
+            />
+
+        <Button
+            android:id="@+id/btnGetCats"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/btnInsertCat"
+            android:text="G Cat"
+            android:textSize="8sp"
+            />
+        <Button
+            android:id="@+id/btnEcho"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/btnGetCats"
+            android:text="Echo"
+            android:textSize="8sp"
+            />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/btnEcho"
+            android:text="Clear"
+            android:textSize="8sp"
             />
 
     </RelativeLayout>

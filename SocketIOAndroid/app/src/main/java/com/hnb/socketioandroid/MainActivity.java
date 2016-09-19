@@ -26,20 +26,36 @@ public class MainActivity extends Activity implements View.OnClickListener
     private Button btnGetPosts;
     private Button btnGetAddresses;
     private Button btnGetCategories;
+    private Button btnGetCats;
+    private Button btnInsertCat;
+    private Button btnClear;
+    private Button btnEcho;
+
 
     public static final String FromAndroid_GetPosts = "FromAndroid_GetPosts";
     public static final String FromAndroid_GetAddresses = "FromAndroid_GetAddresses";
     public static final String FromAndroid_GetCategories = "FromAndroid_GetCategories";
+    public static final String FromAndroid_InsertCat = "FromAndroid_InsertCat";
+    public static final String FromAndroid_GetCats = "FromAndroid_GetCats";
+    public static final String FromAndroid_Echo = "FromAndroid_Echo";
+
+
+
 
     public static final String ToAndroid_GetPosts = "ToAndroid_GetPosts";
     public static final String ToAndroid_GetAddresses = "ToAndroid_GetAddresses";
     public static final String ToAndroid_GetCategories = "ToAndroid_GetCategories";
+    public static final String ToAndroid_InsertCat = "ToAndroid_InsertCat";
+    public static final String ToAndroid_GetCats = "ToAndroid_GetCats";
+    public static final String ToAndroid_Echo = "ToAndroid_Echo";
 
     private Socket mSocket;
+
     {
         try
         {
-            mSocket = IO.socket("http://realtimeapi-90204.onmodulus.net/");
+
+            mSocket = IO.socket("http://socketapi101-90422.onmodulus.net/");
         }
         catch (URISyntaxException e)
         {
@@ -76,12 +92,12 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         if (id == R.id.btnSend)
         {
-            attemptSend("from android" , edtMessage.getText().toString().trim());
+            attemptSend("from android", edtMessage.getText().toString().trim());
         }
 
         if (id == R.id.btnPost)
         {
-            attemptSend(FromAndroid_GetPosts ,"{Android: 'Get Posts'}");
+            attemptSend(FromAndroid_GetPosts, "{Android: 'Get Posts'}");
         }
 
         if (id == R.id.btnCate)
@@ -93,6 +109,28 @@ public class MainActivity extends Activity implements View.OnClickListener
         {
             attemptSend(FromAndroid_GetAddresses, "{Android: 'Get Addresses'}");
         }
+
+        if(id == R.id.btnInsertCat)
+        {
+            attemptSend(FromAndroid_InsertCat, "{Android: 'Insert Cat'}");
+        }
+
+        if(id == R.id.btnGetCats)
+        {
+            attemptSend(FromAndroid_GetCats, "get cats");
+        }
+
+
+        if(id == R.id.btnEcho)
+        {
+            attemptSend(FromAndroid_Echo, edtMessage.getText().toString().trim());
+        }
+
+
+        if(id == R.id.btnClear)
+        {
+            txtData.setText("");
+        }
     }
 
     private void initSocket()
@@ -103,6 +141,9 @@ public class MainActivity extends Activity implements View.OnClickListener
         mSocket.on(ToAndroid_GetAddresses, onNewMessage);
         mSocket.on(ToAndroid_GetCategories, onNewMessage);
         mSocket.on(ToAndroid_GetPosts, onNewMessage);
+        mSocket.on(ToAndroid_InsertCat, onNewMessage);
+        mSocket.on(ToAndroid_GetCats, onNewMessage);
+        mSocket.on(ToAndroid_Echo, onNewMessage);
     }
 
     private void terminalSocket()
@@ -112,6 +153,9 @@ public class MainActivity extends Activity implements View.OnClickListener
         mSocket.off(ToAndroid_GetPosts, onNewMessage);
         mSocket.off(ToAndroid_GetCategories, onNewMessage);
         mSocket.off(ToAndroid_GetAddresses, onNewMessage);
+        mSocket.off(ToAndroid_InsertCat, onNewMessage);
+        mSocket.off(ToAndroid_GetCats, onNewMessage);
+        mSocket.off(ToAndroid_Echo, onNewMessage);
         mSocket.disconnect();
     }
 
@@ -121,6 +165,11 @@ public class MainActivity extends Activity implements View.OnClickListener
         btnGetAddresses = (Button) findViewById(R.id.btnAddress);
         btnGetCategories = (Button) findViewById(R.id.btnCate);
         btnGetPosts = (Button) findViewById(R.id.btnPost);
+        btnGetCats = (Button) findViewById(R.id.btnGetCats);
+        btnInsertCat = (Button) findViewById(R.id.btnInsertCat);
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnEcho = (Button) findViewById(R.id.btnEcho);
+
 
         edtMessage = (EditText) findViewById(R.id.edtMess);
         txtData = (TextView) findViewById(R.id.txtData);
@@ -129,10 +178,14 @@ public class MainActivity extends Activity implements View.OnClickListener
         btnGetPosts.setOnClickListener(this);
         btnGetCategories.setOnClickListener(this);
         btnGetAddresses.setOnClickListener(this);
+        btnGetCats.setOnClickListener(this);
+        btnInsertCat.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+        btnEcho.setOnClickListener(this);
     }
 
 
-    private void attemptSend(String event,  String data)
+    private void attemptSend(String event, String data)
     {
         mSocket.emit(event, data);
     }
